@@ -1,6 +1,6 @@
 variable "aws_region" {
   description = "AWS region"
-  default     = "ap-south-1"
+  default     = "eu-north-1"
 }
 
 variable "ami_id" {
