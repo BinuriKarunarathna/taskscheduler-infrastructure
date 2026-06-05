@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         // Ensure these credentials are created in Jenkins with these IDs
-        AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')
-        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
+        AWS_ACCESS_KEY_ID     = credentials('aws-access-key')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-creds')
         // Name of the SSH Key Pair in AWS
         TF_VAR_key_name       = 'jenkins-user' 
     }
