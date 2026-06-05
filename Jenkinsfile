@@ -19,7 +19,7 @@ pipeline {
         stage('Terraform Init & Validate') {
             steps {
                 dir('terraform') {
-                    sh 'terraform init'
+                    sh 'terraform init -upgrade'
                     sh 'terraform validate'
                 }
             }
