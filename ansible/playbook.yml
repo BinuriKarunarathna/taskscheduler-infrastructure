@@ -1,10 +1,11 @@
 ---
-- name: Configure EC2 Instance
+- name: Configure TaskManager EC2 Instance
   hosts: all
   become: true
   gather_facts: true
+
   tasks:
-    - name: Update apt cache (Debian/Ubuntu)
+    - name: Update apt cache
       apt:
         update_cache: yes
       when: ansible_os_family == "Debian"
@@ -15,16 +16,15 @@
           - git
           - curl
           - nginx
-          # Add more packages here as needed
         state: present
-    
+
     - name: Ensure Nginx is running
       service:
         name: nginx
         state: started
         enabled: yes
 
-    - name: Install dependencies for Docker
+    - name: Install Docker dependencies
       apt:
         name:
           - apt-transport-https
@@ -58,24 +58,33 @@
         update_cache: yes
       when: ansible_os_family == "Debian"
 
-    - name: Ensure Docker service is running
+    - name: Ensure Docker is running
       service:
         name: docker
         state: started
         enabled: yes
 
-    - name: Add user to docker group
+    - name: Add ubuntu user to docker group
       user:
         name: ubuntu
         groups: docker
         append: yes
-    - name: Download Docker Compose binary
+
+    - name: Download Docker Compose
       get_url:
         url: "https://github.com/docker/compose/releases/latest/download/docker-compose-Linux-x86_64"
         dest: /usr/local/bin/docker-compose
         mode: '0755'
-    - name: Create a symbolic link for docker-compose (optional but recommended)
+
+    - name: Create symbolic link for docker-compose
       file:
         src: /usr/local/bin/docker-compose
         dest: /usr/bin/docker-compose
         state: link
+
+    - name: Clone TaskScheduler repo
+      git:
+        repo: 'https://github.com/BinuriKarunarathna/TaskScheduler.git'
+        dest: /home/ubuntu/TaskScheduler
+        version: main
+      become_user: ubuntu

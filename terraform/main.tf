@@ -2,9 +2,9 @@ provider "aws" {
   region = var.aws_region
 }
 
-resource "aws_security_group" "web_sg" {
-  name        = "web_sg"
-  description = "Allow SSH and HTTP inbound traffic"
+resource "aws_security_group" "taskmanager_sg" {
+  name        = "taskmanager_sg"
+  description = "Allow SSH, HTTP, and app ports"
 
   ingress {
     from_port   = 22
@@ -21,15 +21,15 @@ resource "aws_security_group" "web_sg" {
   }
 
   ingress {
-    from_port   = 3000
-    to_port     = 3000
+    from_port   = 5000
+    to_port     = 5000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
-    from_port   = 4000
-    to_port     = 4000
+    from_port   = 3306
+    to_port     = 3306
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -40,6 +40,10 @@ resource "aws_security_group" "web_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  tags = {
+    Name = "taskmanager-sg"
+  }
 }
 
 resource "aws_instance" "app_server" {
@@ -47,9 +51,9 @@ resource "aws_instance" "app_server" {
   instance_type = var.instance_type
   key_name      = var.key_name
 
-  vpc_security_group_ids = [aws_security_group.web_sg.id]
+  vpc_security_group_ids = [aws_security_group.taskmanager_sg.id]
 
   tags = {
-    Name = "EasyCaseAppProductionServer"
+    Name = "TaskManagerProductionServer"
   }
 }

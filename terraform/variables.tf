@@ -1,12 +1,11 @@
 variable "aws_region" {
   description = "AWS region"
-  default     = "us-east-1"
+  default     = "ap-south-1"
 }
 
 variable "ami_id" {
-  description = "AMI ID for the EC2 instance"
-  // Example Ubuntu 22.04 LTS in us-east-1. Update this to match your specific region and OS requirements.
-  default     = "ami-0c7217cdde317cfec" 
+  description = "Ubuntu 22.04 AMI ID"
+  default     = "ami-0f58b397bc5c1f2e8"  # Update for your region
 }
 
 variable "instance_type" {
@@ -15,6 +14,6 @@ variable "instance_type" {
 }
 
 variable "key_name" {
-  description = "Name of the SSH key pair to access the instance"
+  description = "Name of your AWS key pair"
   type        = string
 }

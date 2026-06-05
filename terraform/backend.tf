@@ -1,12 +1,9 @@
 terraform {
   backend "s3" {
-    # REPLACE THIS with your unique bucket name
-    bucket         = "easycase-infrastructure-tf-state"
+    bucket         = "taskmanager-tf-state"       # Create this S3 bucket in AWS first
     key            = "state/terraform.tfstate"
-    region         = "us-east-1"
-    
-    # REPLACE THIS with your DynamoDB table name for locking (Partition key must be LockID)
-    dynamodb_table = "easycase-terraform-locks"
+    region         = "ap-south-1"
+    dynamodb_table = "taskmanager-terraform-locks" # Create this DynamoDB table in AWS first
     encrypt        = true
   }
 }
