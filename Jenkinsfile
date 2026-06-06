@@ -58,7 +58,7 @@ pipeline {
                     sh """
                         ansible-playbook -i inventory.ini playbook.yml \
                             -u ubuntu \
-                            --private-key /home/acer/jenkins-key.pem \
+                            --private-key /var/lib/jenkins/jenkins-key.pem \
                             --ssh-common-args='-o StrictHostKeyChecking=no'
                     """
                 }
