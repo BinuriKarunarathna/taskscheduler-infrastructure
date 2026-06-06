@@ -6,7 +6,7 @@ pipeline {
         AWS_ACCESS_KEY_ID     = credentials('aws-access-key')
         AWS_SECRET_ACCESS_KEY = credentials('aws-creds')
         // Name of the SSH Key Pair in AWS
-        TF_VAR_key_name       = 'jenkins-user' 
+        TF_VAR_key_name       = 'jenkins-key' 
     }
 
     stages {
