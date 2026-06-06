@@ -55,18 +55,12 @@ pipeline {
                         echo "Configuring Server at IP: ${env.SERVER_IP}"
                         sh "echo '[webservers]\n${env.SERVER_IP}' > inventory.ini"
                     }
-                    withCredentials([sshUserPrivateKey(
-                        credentialsId: 'ec2-ssh-key',
-                        keyFileVariable: 'SSH_KEY_FILE',
-                        usernameVariable: 'SSH_USER'
-                    )]) {
-                        sh """
-                            ansible-playbook -i inventory.ini playbook.yml \
-                                -u ubuntu \
-                                --private-key \$SSH_KEY_FILE \
-                                --ssh-common-args='-o StrictHostKeyChecking=no'
-                        """
-                    }
+                    sh """
+                        ansible-playbook -i inventory.ini playbook.yml \
+                            -u ubuntu \
+                            --private-key /home/acer/jenkins-key.pem \
+                            --ssh-common-args='-o StrictHostKeyChecking=no'
+                    """
                 }
             }
         }
