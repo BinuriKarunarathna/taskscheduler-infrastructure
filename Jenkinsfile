@@ -36,13 +36,17 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 dir('terraform') {
-                    // Apply the plan
                     sh 'terraform apply -auto-approve tfplan'
-                    
-                    // Extract the public IP to use in Ansible
                     script {
-                        def serverIp = sh(script: "terraform output -raw instance_public_ip", returnStdout: true).trim()
+                        def serverIp = sh(
+                            script: 'terraform output -raw instance_public_ip',
+                            returnStdout: true
+                        ).trim()
                         env.SERVER_IP = serverIp
+                        echo "EC2 Server IP: ${env.SERVER_IP}"
+
+                        // Save IP to a shared file
+                        sh "echo ${serverIp} > /var/lib/jenkins/ec2_ip.txt"
                     }
                 }
             }
