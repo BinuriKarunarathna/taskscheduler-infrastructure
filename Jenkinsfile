@@ -53,16 +53,19 @@ pipeline {
                 dir('ansible') {
                     script {
                         echo "Configuring Server at IP: ${env.SERVER_IP}"
-                        
-                        // Create a temporary inventory file with the dynamic IP
                         sh "echo '[webservers]\n${env.SERVER_IP}' > inventory.ini"
                     }
-                    
-                    // Run the playbook
-                    // 'ec2-ssh-key' should be the ID of the private key credential in Jenkins
-                    sshagent(['ec2-ssh-key']) {
-                        // Assuming 'ubuntu' user for the AMI. Change to 'ec2-user' for Amazon Linux
-                        sh "ansible-playbook -i inventory.ini playbook.yml -u ubuntu --ssh-common-args='-o StrictHostKeyChecking=no'"
+                    withCredentials([sshUserPrivateKey(
+                        credentialsId: 'ec2-ssh-key',
+                        keyFileVariable: 'SSH_KEY_FILE',
+                        usernameVariable: 'SSH_USER'
+                    )]) {
+                        sh """
+                            ansible-playbook -i inventory.ini playbook.yml \
+                                -u ubuntu \
+                                --private-key \$SSH_KEY_FILE \
+                                --ssh-common-args='-o StrictHostKeyChecking=no'
+                        """
                     }
                 }
             }
