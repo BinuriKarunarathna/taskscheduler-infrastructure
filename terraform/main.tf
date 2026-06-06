@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_security_group" "taskmanager_sg" {
-  name        = "taskmanager_sg"
+  name_prefix = "taskmanager_sg_"
   description = "Allow SSH, HTTP, and app ports"
 
   ingress {
